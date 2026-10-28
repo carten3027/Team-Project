@@ -59,9 +59,25 @@ public class FieldItem : MonoBehaviour
                 // 성공 시 true, 실패(가방 가득 참 / 무게 초과) 시 false가 pickedUp 변수에 저장됨
                 bool pickedUp = InventoryAndItem.Instance.TryAddItemToBag(itemType, itemWeight, effectValue);
 
-                // 아이템 습득에 성공한 경우
+                // 아이템 습득에 성공한 경우 (가방 개수/무게 제한 통과)
                 if (pickedUp)
                 {
+                    // 부딪힌 플레이어에게서 Player 스크립트 컴포넌트를 찾아옴
+                    Player player = other.GetComponentInParent<Player>();
+                    if (player != null)
+                    {
+                        // 아이템 종류가 Heal(회복)이면 플레이어 체력 회복!
+                        if (itemType == DropItemType.Heal)
+                        {
+                            player.Heal(Mathf.RoundToInt(effectValue));
+                        }
+                        // 아이템 종류가 Invincible(무적)이면 플레이어 무적 발동!
+                        else if (itemType == DropItemType.Invincible)
+                        {
+                            player.ActivateInvincibleItem(effectValue);
+                        }
+                    }
+
                     // 맵 필드에 남아있는 아이템 오브젝트를 즉시 삭제
                     Destroy(gameObject);
                 }

@@ -164,6 +164,18 @@ public class Player : MonoBehaviour
         TakeDamage(damagePerHit);
     }
 
+    public void Heal(int amount)
+    {
+        currentHp = Mathf.Min(maxHp, currentHp + amount);
+        Debug.Log($"[아이템] 체력 회복! 현재 HP: {currentHp}/{maxHp}");
+    }
+
+    public void ActivateInvincibleItem(float duration)
+    {
+        StartCoroutine(InvincibleRoutine());
+        Debug.Log($"[아이템] 무적 효과 발동!");
+    }
+
     public void PushEnemy(Enemy enemy)
     {
         if (isDead) return;
